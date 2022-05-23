@@ -7,9 +7,14 @@
 
 import CoreData
 
+// Core Dataに必要なオブジェクトの作成と管理を行う永続コンテナ（PersistentContainer）のコントローラー
 struct PersistenceController {
+    // 通常版の永続コンテナコントローラー
     static let shared = PersistenceController()
 
+    // preview用の永続コンテナコントローラー
+    // - preview用に初期データが設定される
+    // - DBが実ファイルでなくメモリ上に構築される（コミットしても永続化されない）
     static var preview: PersistenceController = {
         let result = PersistenceController(inMemory: true)
         let viewContext = result.container.viewContext
@@ -27,7 +32,7 @@ struct PersistenceController {
             fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
         }
         return result
-    }()
+    }() // preview ここまで
 
     let container: NSPersistentContainer
 
@@ -53,5 +58,5 @@ struct PersistenceController {
                 fatalError("Unresolved error \(error), \(error.userInfo)")
             }
         })
-    }
+    } // init ここまで
 }
